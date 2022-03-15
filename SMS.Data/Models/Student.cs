@@ -29,7 +29,7 @@ namespace SMS.Data.Models
         public string PhotoUrl { get; set; }     
 
         // Relationship 1-N tickets
-        public IList<Ticket> Tickets {get; set; } = new List<Ticket>();
+        public IList<Ticket> Tickets {get; set; } = new List<Ticket>(); //have to initialise the list - create it. fail safe. just empty 
         
         // Relationship M:M Students - Modules
         public IList<StudentModule> StudentModules {get; set;} = new List<StudentModule>();

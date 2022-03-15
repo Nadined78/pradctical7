@@ -33,8 +33,12 @@
             
             <!-- add navigation link to Delete action, passing the correct route id parameter --> 
             <a asp-controller="Student" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-sm btn-danger">Delete</a>
+        
+        
+            <a asp-controller="Student" asp-action="TicketCreate" asp-route-id="@Model.Id" class="btn btn-sm btn-secondary">Add Ticket</a>
         </div>
     </div>
+
     <!-- Photo -->
     <div class="col-4">
         <img src="@Model.PhotoUrl" class="img-fluid">
@@ -43,3 +47,15 @@
 
 <!-- TBC Create and Add Tickets Partial View Table -->   
 
+<!--Ticket Details-->
+<div class="row pt-4">
+    @if (Model.Tickets.Count > 0)
+    {
+        <partial name= "_Tickets"/>
+    }
+    else 
+    {
+        <h5>No Tickets.....</h5>
+    }
+</div>
+ 

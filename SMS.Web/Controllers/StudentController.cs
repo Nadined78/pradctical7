@@ -121,7 +121,7 @@ namespace SMS.Web.Controllers
         // ============== Student ticket management ==============
 
           // GET /student/createticket/{id}
-        public IActionResult TicketCreate(int id)
+        public IActionResult TicketCreate(int id) //takes id of student
         {
             var s = svc.GetStudent(id);
             if (s == null)
@@ -130,9 +130,9 @@ namespace SMS.Web.Controllers
             }
 
             // create a ticket view model and set foreign key
-            var ticket = new Ticket { StudentId = id }; 
+            var ticket = new Ticket { StudentId = id }; //dummy ticket
             // render blank form
-            return View( ticket );
+            return View( ticket ); // pass to view 
         }
 
         // POST /student/create
@@ -140,12 +140,19 @@ namespace SMS.Web.Controllers
         public IActionResult TicketCreate(Ticket t)
         {
             if (ModelState.IsValid)
-            {                
-                var ticket = svc.CreateTicket(t.StudentId, t.Issue);
-                return RedirectToAction(nameof(Details), new { Id = ticket.StudentId });
+            {
+                var result = svc.CreateTicket(t.StudentId, t.Issue);
+                return RedirectToAction(nameof(Details), new {Id = t.StudentId});
             }
-            // redisplay the form for editing
+
             return View(t);
+            // if (ModelState.IsValid)
+            // {                
+            //     var ticket = svc.CreateTicket(t.StudentId, t.Issue);
+            //     return RedirectToAction(nameof(Details), new { Id = ticket.StudentId });
+            // }
+            // // redisplay the form for editing
+            // return View(t);
         }
 
          // GET /student/ticketdelete/{id}
@@ -168,9 +175,10 @@ namespace SMS.Web.Controllers
         public IActionResult TicketDeleteConfirm(int id, int studentId)
         {
             // TBC delete student via service
+            svc.DeleteTicket(id);
             
             // redirect to view the List of Students
-            return NotFound();
+            return RedirectToAction(nameof(Details), new {Id = studentId});
         }
 
 

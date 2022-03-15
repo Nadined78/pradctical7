@@ -23,10 +23,13 @@
     </div>
 
     <div class="mt-4">
-        <!-- TBC -->
-        <!-- add a form with hidden input storing the ticket id as Id and a   -->
-        <!-- second hidden input field containing the student id as StudentId -->
-        <!-- the form asp-action should call TicketDeleteConfirm              -->
+        <!-- use a form with hidden input storing ticket id -->
+        <form asp-action="TicketDeleteConfirm" type="post">
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="StudentId"/>
+            <input type="submit" value="Confirm" class="btn btn-danger" />
+            <a class="btn btn-secondary" asp-controller="Student" asp-action="Delete"></a>
+        </form>
     </div>
-    
+
 </div>

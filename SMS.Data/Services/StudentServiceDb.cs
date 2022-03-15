@@ -27,7 +27,8 @@ namespace SMS.Data.Services
         // retrieve list of Students
         public List<Student> GetStudents()
         {
-            return db.Students.ToList();
+            return db.Students.ToList(); //might have to add include in here too. in real world wouldnt do this - too much data
+        //performance issues - come back to 
         }
 
 
@@ -35,7 +36,7 @@ namespace SMS.Data.Services
         public Student GetStudent(int id)
         {
             return db.Students
-                     .Include(s => s.Tickets)
+                     .Include(s => s.Tickets) //including the students tickets - always be empty otherwise if we didnt include this 
                      .Include(s => s.StudentModules)
                      // drill down and include each studentmodule module entity     
                      .ThenInclude(sm => sm.Module) 
@@ -111,9 +112,23 @@ namespace SMS.Data.Services
         // ===================== Ticket Management ==========================
         public Ticket CreateTicket(int studentId, string issue)
         {
-            // TBC - complete this method
-            return null;
-        }
+            var student = GetStudent(studentId);
+            if (student == null) return null;
+
+            var ticket = new Ticket
+            {
+                // Id created by Database
+                Issue = issue,
+                StudentId = studentId,
+                // set by default in model but we can override here if required
+                CreatedOn = DateTime.Now,
+                Active = true,
+            };
+
+            db.Tickets.Add(ticket);
+            db.SaveChanges(); // write to database
+            return ticket;
+        } 
 
         public Ticket GetTicket(int id)
         {
@@ -143,7 +158,7 @@ namespace SMS.Data.Services
             if (ticket == null) return false;
             
             // remove ticket 
-            var result = db.Tickets.Remove(ticket);
+            db.Tickets.Remove(ticket);
             
             db.SaveChanges();
             return true;

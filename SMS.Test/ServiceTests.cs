@@ -144,16 +144,16 @@ namespace SMS.Test
         public void Student_GetStudent_ThatExistsWithTickets_ShouldReturnStudentWithTickets()
         {
             // arrange 
-            var s = svc.AddStudent("XXX", "Computing", "xxx@email.com", 20, 0, "");
-            svc.CreateTicket(s.Id, "Ticket 1");
-            svc.CreateTicket(s.Id, "Ticket 2");
+            var s = svc.AddStudent("XXX", "Computing", "xxx@email.com", 20, 0, "");//create a student
+            svc.CreateTicket(s.Id, "Ticket 1");//created a ticket
+            svc.CreateTicket(s.Id, "Ticket 2");//create another ticket 
             
             // act
-            var student = svc.GetStudent(s.Id);
+            var student = svc.GetStudent(s.Id); //test getstudent again - this uses the include(s => s.Tickets)
 
             // assert
             Assert.NotNull(s);    
-            Assert.Equal(2, student.Tickets.Count);
+            Assert.Equal(2, student.Tickets.Count);//check the list of tickets has a count of 2
         }
 
         [Fact]
@@ -215,11 +215,16 @@ namespace SMS.Test
         {
             // TBC - complete this method
             // arrange
-           
+            var s = svc.AddStudent("Clare", "Computing", "clare@gmail.com", 21,0,"");
+                   
             // act
+            var t = svc.CreateTicket(s.Id,"An Issue");
            
             // assert
-          
+            Assert.NotNull(t);
+            Assert.Equal(s.Id, t.StudentId);
+            Assert.Equal("An issue", t.Issue);
+            Assert.True(t.Active);
         }
 
          [Fact] // --- GetTicket should include Student
@@ -274,14 +279,16 @@ namespace SMS.Test
             // arrange
             var s = svc.AddStudent("XXX", "xxx@email.com", "Computing", 20, 0, "http://photo.com");
             var t = svc.CreateTicket(s.Id, "Dummy Ticket");
+            var closed = svc.CloseTicket(t.Id);     // close active ticket  
 
-            // act
-            var closed = svc.CloseTicket(t.Id);     // close active ticket    
+            // act  
             closed = svc.CloseTicket(t.Id);         // close non active ticket
 
             // assert
             Assert.Null(closed);                    // no ticket returned as already closed
         }
+
+        //try close a ticket that doesnt exist - create a test for this?
 
         [Fact] 
         public void Ticket_DeleteTicket_WhenExists_ShouldReturnTrue()
